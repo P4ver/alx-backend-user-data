@@ -16,12 +16,12 @@ PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 def filter_datum(
-        flds: List[str], redact: str, msg: str, sep: str,
+        fields: List[str], redaction: str, message: str, separator: str,
         ) -> str:
     """Filters a log line.
     """
-    ext, rep = (patterns["extract"], patterns["replace"])
-    return re.sub(ext(flds, sep), rep(redact), msg)
+    extract, replace = (patterns["extract"], patterns["replace"])
+    return re.sub(extract(fields, separator), replace(redaction), message)
 
 
 def get_logger() -> logging.Logger:
