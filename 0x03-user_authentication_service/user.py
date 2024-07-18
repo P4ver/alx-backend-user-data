@@ -18,9 +18,9 @@ def welcome() -> str:
 def user() -> str:
     """ POST ,"""
     email = request.form.get('email')
-    password = request.form.get('password')
+    pswrd = request.form.get('password')
     try:
-        AUTH.register_user(email, password)
+        AUTH.register_user(email, pswrd)
         return jsonify({"email": f"{email}", "message": "user created"}), 200
     except Exception:
         return jsonify({"message": "email already registered"}), 400
@@ -30,8 +30,8 @@ def user() -> str:
 def login() -> str:
     """ POST"""
     email = request.form.get('email')
-    password = request.form.get('password')
-    valid_login = AUTH.valid_login(email, password)
+    pswrd = request.form.get('password')
+    valid_login = AUTH.valid_login(email, pswrd)
     if valid_login:
         session_id = AUTH.create_session(email)
         response = jsonify({"email": f"{email}", "message": "logged in"})
@@ -44,8 +44,8 @@ def login() -> str:
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
 def logout() -> str:
     """ DELETE"""
-    session_id = request.cookies.get('session_id')
-    user = AUTH.get_user_from_session_id(session_id)
+    sessionid = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(sessionid)
     if user:
         AUTH.destroy_session(user.id)
         return redirect('/')
@@ -56,8 +56,8 @@ def logout() -> str:
 @app.route('/profile', methods=['GET'], strict_slashes=False)
 def profile() -> str:
     """Get"""
-    session_id = request.cookies.get('session_id')
-    user = AUTH.get_user_from_session_id(session_id)
+    sessionid = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(sessionid)
     if user:
         return jsonify({"email": user.email}), 200
     else:
@@ -80,10 +80,10 @@ def get_reset_password_token() -> str:
 def update_password() -> str:
     """ PUT_reset_password"""
     email = request.form.get('email')
-    reset_token = request.form.get('reset_token')
+    reset_tkn = request.form.get('reset_token')
     new_psw = request.form.get('new_password')
     try:
-        AUTH.update_password(reset_token, new_psw)
+        AUTH.update_password(reset_tkn, new_psw)
         return jsonify({"email": f"{email}",
                         "message": "Password updated"}), 200
     except Exception:
